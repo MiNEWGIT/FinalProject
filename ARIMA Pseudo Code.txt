@@ -1,0 +1,34 @@
+# ARIMA(p, d, q) where p, d, q are the order of the AR, differencing, and MA components respectively
+
+# Step 1: Differencing the time series to make it stationary
+function difference_series(series, order_d):
+    differenced_series = []
+    for i from order_d to length(series):
+        differenced_value = series[i] - series[i - order_d]
+        append differenced_value to differenced_series
+    return differenced_series
+
+# Step 2: Fit AR model
+function fit_ar_model(differenced_series, order_p):
+    coefficients = estimate_coefficients_using_least_squares(differenced_series, order_p)
+    return coefficients
+
+# Step 3: Fit MA model
+function fit_ma_model(residuals, order_q):
+    coefficients = estimate_coefficients_using_least_squares(residuals, order_q)
+    return coefficients
+
+# Step 4: Forecast future values
+function forecast_arima(series, order_p, order_d, order_q, forecast_steps):
+    differenced_series = difference_series(series, order_d)
+    
+    ar_coefficients = fit_ar_model(differenced_series, order_p)
+    residuals = calculate_residuals(differenced_series, ar_coefficients)
+    ma_coefficients = fit_ma_model(residuals, order_q)
+    
+    future_values = []
+    for step from 1 to forecast_steps:
+        forecast_value = ar_component + ma_component  # combine AR and MA components
+        append forecast_value to future_values
+    
+    return future_values
