@@ -1,0 +1,46 @@
+// Define parameters for OC-SVM
+Set nu to 0.5  // an upper bound on the fraction of margin errors and a lower bound of the fraction of support vectors
+Set kernel to 'rbf'  // radial basis function kernel
+Set gamma to 'scale'  // kernel coefficient
+
+// Define a function to train the OC-SVM model
+Function train_ocsvm(data, nu, kernel, gamma)
+    Initialize OC-SVM model with parameters nu, kernel, and gamma
+    Fit the model to the data
+    Return trained OC-SVM model
+End Function
+
+// Define a function to predict anomalies using the trained OC-SVM model
+Function predict_ocsvm(model, data)
+    Initialize an empty list of anomaly_labels
+    For each data_point in data
+        If model predicts data_point as inliers
+            Add "normal" to anomaly_labels
+        Else
+            Add "anomaly" to anomaly_labels
+        End If
+    End For
+    Return anomaly_labels
+End Function
+
+// Define a function to calculate decision function scores
+Function decision_function_ocsvm(model, data)
+    Initialize an empty list of decision_scores
+    For each data_point in data
+        decision_score = model.decision_function(data_point)
+        Add decision_score to decision_scores
+    End For
+    Return decision_scores
+End Function
+
+// Main function
+Function main()
+    Load dataset
+    Split dataset into training_data and test_data
+    Train OC-SVM model using train_ocsvm(training_data, nu, kernel, gamma)
+    Predict anomalies on test_data using predict_ocsvm(trained_model, test_data)
+    Calculate decision scores on test_data using decision_function_ocsvm(trained_model, test_data)
+    Print or save the anomaly labels and decision scores
+End Function
+
+// Pseudo code ends
