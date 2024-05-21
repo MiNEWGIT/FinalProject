@@ -1,0 +1,86 @@
+// Define Isolation Forest parameters
+Set number_of_trees to 100
+Set subsample_size to 256
+Set max_depth to ceiling(log2(subsample_size))
+
+// Define a function to create a tree
+Function create_tree(data, current_depth)
+    If current_depth >= max_depth OR data size <= 1
+        Return leaf node with anomaly score 0
+    End If
+    
+    Select a random feature from the data
+    Select a random split value within the range of the selected feature
+    
+    Split the data into left and right subsets based on the split value
+    
+    Create left subtree by calling create_tree on the left subset with current_depth + 1
+    Create right subtree by calling create_tree on the right subset with current_depth + 1
+    
+    Return node with split information, left subtree, and right subtree
+End Function
+
+// Define a function to create an Isolation Forest
+Function create_isolation_forest(data)
+    Initialize an empty list of trees
+    For i from 1 to number_of_trees
+        Randomly select a subsample of the data of size subsample_size
+        Create a tree by calling create_tree on the subsample with depth 0
+        Add the created tree to the list of trees
+    End For
+    Return the list of trees
+End Function
+
+// Define a function to calculate the path length for a single data point
+Function path_length(tree, data_point, current_depth)
+    If the tree is a leaf node
+        Return current_depth
+    End If
+    
+    If data_point value for the tree's split feature < split value
+        Return path_length(left subtree, data_point, current_depth + 1)
+    Else
+        Return path_length(right subtree, data_point, current_depth + 1)
+    End If
+End Function
+
+// Define a function to calculate the average path length for a data point
+Function average_path_length(forest, data_point)
+    Initialize total_path_length to 0
+    For each tree in the forest
+        total_path_length += path_length(tree, data_point, 0)
+    End For
+    Return total_path_length / number_of_trees
+End Function
+
+// Define a function to calculate the anomaly score
+Function anomaly_score(data_point, forest)
+    avg_path_len = average_path_length(forest, data_point)
+    c_n = 2 * (log(subsample_size - 1) + 0.5772156649) - (2 * (subsample_size - 1) / subsample_size)
+    Return 2 ^ (-avg_path_len / c_n)
+End Function
+
+// Define a function to label anomalies in a dataset
+Function label_anomalies(data, forest, threshold)
+    Initialize an empty list of anomaly_labels
+    For each data_point in the data
+        score = anomaly_score(data_point, forest)
+        If score >= threshold
+            Add "anomaly" to anomaly_labels
+        Else
+            Add "normal" to anomaly_labels
+        End If
+    End For
+    Return anomaly_labels
+End Function
+
+// Main function
+Function main()
+    Load dataset
+    Create isolation forest using create_isolation_forest(dataset)
+    Set anomaly threshold (e.g., 0.5)
+    Label anomalies using label_anomalies(dataset, forest, threshold)
+    Print or save the anomaly labels
+End Function
+
+// Pseudo code ends
