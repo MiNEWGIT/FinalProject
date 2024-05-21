@@ -1,0 +1,1 @@
+We are delighted to present our final project, "Heart Rate Monitoring," a cutting-edge application developed under the supervision of Zeev Frenkel. This innovative solution, crafted by Ali Mohsen and Mohammad Khamaisy.
