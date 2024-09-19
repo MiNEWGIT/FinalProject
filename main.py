@@ -574,7 +574,7 @@ class HeartRateApp(toga.App):
             cap.release()
             cv2.destroyAllWindows()
        
-    async def periodic_measurement(self, interval=45):#change this to 1800 (30 min)
+    async def periodic_measurement(self, interval=1800):#change this to 1800 (30 min)
     # Wait interval seconds before the first measurement
         await asyncio.sleep(interval)
         
@@ -646,7 +646,7 @@ class HeartRateApp(toga.App):
             
             print(f"Measured BPM: {measured_bpm}, Stored HR: {stored_heart_rate}, Discrepancy: {abs(stored_heart_rate - measured_bpm)}")
             
-            if stored_heart_rate is not None and abs(stored_heart_rate - measured_bpm) > 5:
+            if stored_heart_rate is not None and abs(stored_heart_rate - measured_bpm) > 30:
                 heart_rate_status = 'High' if measured_bpm < stored_heart_rate else 'Low'
                 
                 reason = await self.ask_for_reason(heart_rate_status)
